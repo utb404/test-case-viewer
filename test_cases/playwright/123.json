@@ -1,0 +1,35 @@
+{
+  "id": "tc_001",
+  "title": "Открытие вкладки Writing tests",
+  "author": "Senior QA",
+  "tags": [
+    "\n        \n        \n        Authentication\n        \n    \n        \n    \n        \n    ",
+    "\n        \n        \n        Positive\n        \n    \n        \n    \n        \n    "
+  ],
+  "status": "Draft",
+  "useCaseId": "uc_001",
+  "levels": [
+    "\n        \n        \n        FunctionalTesting\n        \n    \n        \n    \n        \n    ",
+    "\n        \n        \n        SmokeTesting\n        \n    \n        \n    \n        \n    "
+  ],
+  "precondition": "Открыть страницу https://playwright.dev",
+  "actions": [
+    {
+      "step": "Выбрать язык C#",
+      "expected_res": "Выбранный язык отображается в верхнем меню"
+    },
+    {
+      "step": "Открыть документацию",
+      "expected_res": "Открыта страница документации"
+    },
+    {
+      "step": "В документации открыть вкладку Running and debugging tests'",
+      "expected_res": "Открыта вкладка Running and debugging tests"
+    },
+    {
+      "step": "blah blah",
+      "expected_res": "blah"
+    }
+  ],
+  "updated_at": "2025-09-24T09:30:15.954731"
+}

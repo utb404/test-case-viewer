@@ -1,0 +1,36 @@
+{
+  "id": "tc_003",
+  "title": "Отрытие ремонта",
+  "author": "Senior QA",
+  "tags": [
+    "created_by_ai",
+    "Authentication",
+    "Positive"
+  ],
+  "status": "Draft",
+  "useCaseId": "uc_003",
+  "levels": [
+    "FunctionalTesting",
+    "SmokeTesting"
+  ],
+  "precondition": "Открыть страницу https://dev1.era.devzone.local:81",
+  "actions": [
+    {
+      "step": "Зайди под пользователем admin и паролем 1",
+      "expected_res": "Пользователь залогинен"
+    },
+    {
+      "step": "Открыть главное меню",
+      "expected_res": "Открыто главное меню"
+    },
+    {
+      "step": "Перейти на страницу Аварийность - Сводка",
+      "expected_res": "Открыта сводка Аварийность"
+    },
+    {
+      "step": "Открыть ремонт с дебитом нефти равным 8т",
+      "expected_res": "Открыт ремонт с ожидаеомым дебитом нефти"
+    }
+  ],
+  "updated_at": "2025-09-24T09:39:06.724615"
+}

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотрщик тест-кейсов</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <!-- Левая панель - Дерево файлов -->
+            <div class="col-md-4 col-lg-3 sidebar">
+                <div class="sidebar-header">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">
+                            <i class="fas fa-folder-tree"></i> Структура тест-кейсов
+                        </h5>
+                        <button class="btn btn-outline-primary btn-sm" id="createDirectoryBtn" title="Создать директорию">
+                            <i class="fas fa-folder-plus"></i>
+                        </button>
+                    </div>
+                    <div class="search-container mb-3">
+                        <div class="input-group">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Поиск по ID или названию...">
+                            <button class="btn btn-outline-secondary" type="button" id="searchBtn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="file-tree" id="fileTree">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Загрузка...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая панель - Детали тест-кейса -->
+            <div class="col-md-8 col-lg-9 main-content">
+                <div class="content-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 id="testCaseTitle">Выберите тест-кейс для просмотра</h4>
+                        <div class="btn-group" id="testCaseActions" style="display: none;">
+                            <button class="btn btn-outline-primary btn-sm" id="editTestCaseBtn">
+                                <i class="fas fa-edit"></i> Редактировать
+                            </button>
+                            <button class="btn btn-outline-success btn-sm" id="duplicateTestCaseBtn">
+                                <i class="fas fa-copy"></i> Дублировать
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" id="deleteTestCaseBtn">
+                                <i class="fas fa-trash"></i> Удалить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-primary btn-sm" id="createTestCaseBtn">
+                            <i class="fas fa-plus"></i> Создать новый тест-кейс
+                        </button>
+                    </div>
+                </div>
+                <div class="content-body" id="testCaseContent">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-file-alt fa-3x mb-3"></i>
+                        <p>Выберите тест-кейс из левой панели для просмотра его деталей</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для создания/редактирования тест-кейса -->
+    <div class="modal fade" id="testCaseModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="testCaseModalTitle">Создать тест-кейс</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="testCaseForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="testCaseId" class="form-label">ID тест-кейса</label>
+                                        <input type="text" class="form-control" id="testCaseId" placeholder="Автоматически сгенерируется">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="testCaseStatus" class="form-label">Статус</label>
+                                        <select class="form-select" id="testCaseStatus">
+                                            <option value="Draft">Draft</option>
+                                            <option value="Ready">Ready</option>
+                                            <option value="In Review">In Review</option>
+                                            <option value="Approved">Approved</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="testCaseTitle" class="form-label">Название *</label>
+                                <input type="text" class="form-control" id="testCaseTitle" required>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="testCaseAuthor" class="form-label">Автор *</label>
+                                        <input type="text" class="form-control" id="testCaseAuthor" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="testCaseUseCaseId" class="form-label">Use Case ID</label>
+                                        <input type="text" class="form-control" id="testCaseUseCaseId">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="testCasePrecondition" class="form-label">Предусловие</label>
+                                <textarea class="form-control" id="testCasePrecondition" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Теги</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="tagInput" placeholder="Введите тег и нажмите Enter">
+                                    <button class="btn btn-outline-secondary" type="button" id="addTagBtn">Добавить</button>
+                                </div>
+                                <div class="mt-2" id="tagsContainer"></div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Уровни тестирования</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="levelSelect">
+                                        <option value="FunctionalTesting">Functional Testing</option>
+                                        <option value="SmokeTesting">Smoke Testing</option>
+                                        <option value="RegressionTesting">Regression Testing</option>
+                                        <option value="IntegrationTesting">Integration Testing</option>
+                                        <option value="PerformanceTesting">Performance Testing</option>
+                                    </select>
+                                    <button class="btn btn-outline-secondary" type="button" id="addLevelBtn">Добавить</button>
+                                </div>
+                                <div class="mt-2" id="levelsContainer"></div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Шаги выполнения</label>
+                                <div id="testStepsContainer">
+                                    <div class="test-step-form mb-3">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Шаг</label>
+                                                <textarea class="form-control step-action" rows="2" placeholder="Опишите действие"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Ожидаемый результат</label>
+                                                <textarea class="form-control step-expected" rows="2" placeholder="Опишите ожидаемый результат"></textarea>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-danger btn-sm mt-2 remove-step" style="display: none;">
+                                            <i class="fas fa-trash"></i> Удалить шаг
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="addStepBtn">
+                                    <i class="fas fa-plus"></i> Добавить шаг
+                                </button>
+                            </div>
+                        </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="saveTestCaseBtn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно подтверждения удаления -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите удалить тест-кейс <strong id="deleteTestCaseName"></strong>?</p>
+                    <p class="text-danger">Это действие нельзя отменить!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания директории -->
+    <div class="modal fade" id="createDirectoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Создать новую директорию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="directoryName" class="form-label">Название директории</label>
+                        <input type="text" class="form-control" id="directoryName" placeholder="Введите название директории">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="confirmCreateDirectoryBtn">Создать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

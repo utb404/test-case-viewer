@@ -1,0 +1,35 @@
+{
+  "id": "tc_002",
+  "title": "Открытие вкладки Clock из поиска",
+  "author": "Senior QA",
+  "tags": [
+    "created_by_ai",
+    "Authentication",
+    "Positive"
+  ],
+  "status": "Draft",
+  "useCaseId": "uc_001",
+  "levels": [
+    "FunctionalTesting",
+    "SmokeTesting"
+  ],
+  "precondition": "Открыть страницу https://playwright.dev",
+  "actions": [
+    {
+      "step": "Выбрать язык Python",
+      "expected_res": "Выбранный язык отображается в верхнем меню"
+    },
+    {
+      "step": "Открыть поле поиска по документации",
+      "expected_res": "Открыто поле поиска по документации"
+    },
+    {
+      "step": "Ввести в поле поиска Clock",
+      "expected_res": "В результатах поиска отображаются страницы, содержащие Clock"
+    },
+    {
+      "step": "Перейти на первую страницу, содержащую Clock",
+      "expected_res": "Открыта вкладка документации, содержащую Clock"
+    }
+  ]
+}
