@@ -13,7 +13,7 @@
     "FunctionalTesting",
     "SmokeTesting"
   ],
-  "precondition": "Открыть страницу https://dev1.era.devzone.local:81",
+  "precondition": "Открыть страницу https://example:81",
   "actions": [
     {
       "step": "Зайди под пользователем admin и паролем 1",
